@@ -12,6 +12,7 @@ import { join } from 'node:path'
 import { createInterface } from 'node:readline'
 import { createRequire } from 'node:module'
 import { NoteFlareClient, NoteFlareError, WrongSecretError } from '../../client/dist/index.js'
+import { noteFolder, safeName } from '../lib/paths.mjs'
 
 const HELP = `noteflare — end-to-end encrypted notes from the terminal
 
@@ -131,7 +132,7 @@ async function main() {
       const notes = await nf.list({ archived: true })
       const used = new Set()
       for (const n of notes) {
-        const folder = join(dir, ...(n.labels.find((l) => l.includes('/'))?.split('/') ?? []))
+        const folder = noteFolder(dir, n.labels)
         await mkdir(folder, { recursive: true })
         let name = safeName(n.title || firstLine(n.body) || n.id.slice(0, 8))
         for (let i = 2; used.has(join(folder, name)); i++) name = `${safeName(n.title || n.id.slice(0, 8))} (${i})`
@@ -175,7 +176,6 @@ function toMarkdown(n, { frontmatter }) {
 
 const firstLine = (s) => s.split('\n').find((l) => l.trim())?.replace(/^[#>\-*\s[\]x]+/, '').slice(0, 60) ?? ''
 const splitList = (s) => (s ? s.split(',').map((x) => x.trim()).filter(Boolean) : [])
-const safeName = (s) => s.replace(/[\\/:*?"<>|\u0000-\u001f]/g, '-').replace(/\s+/g, ' ').trim().slice(0, 100) || 'note'
 
 async function readStdin() {
   if (process.stdin.isTTY) return ''

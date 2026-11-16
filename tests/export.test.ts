@@ -26,6 +26,17 @@ describe('Markdown export', () => {
     ]).map((f) => f.name)
     expect(files).toEqual(['NoteFlare/Same.md', 'NoteFlare/same (2).md', 'NoteFlare/a-b-c.md', 'NoteFlare/First line.md', 'NoteFlare/work/q4/Deep.md'])
   })
+
+  it('never puts ".." in a zip path, whatever the label', () => {
+    const files = markdownEntries(
+      ['../../x', 'a/ ../ ../x', 'a/.. /b', '//etc', ' ../.ssh/'].map((l, i) => note({ title: `T${i}`, labels: [l] })),
+    ).map((f) => f.name)
+    for (const f of files) {
+      expect(f.startsWith('NoteFlare/')).toBe(true)
+      expect(f.split('/')).not.toContain('..')
+      expect(f.split('/').some((p) => p.startsWith('.'))).toBe(false)
+    }
+  })
 })
 
 describe('makeZip', () => {
