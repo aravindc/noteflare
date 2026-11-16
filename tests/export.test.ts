@@ -29,7 +29,7 @@ describe('Markdown export', () => {
 
   it('never puts ".." in a zip path, whatever the label', () => {
     const files = markdownEntries(
-      ['../../x', 'a/ ../ ../x', 'a/.. /b', '//etc', ' ../.ssh/', '... ../x', '. . ./x'].map((l, i) => note({ title: `T${i}`, labels: [l] })),
+      ['../../x', 'a/ ../ ../x', 'a/.. /b', '//etc', ' ../.ssh/', '... ../x', '. . ./x', '... ../... ../x'].map((l, i) => note({ title: `T${i}`, labels: [l] })),
     ).map((f) => f.name)
     for (const f of files) {
       expect(f.startsWith('NoteFlare/')).toBe(true)

@@ -11,7 +11,7 @@ describe('CLI export paths', () => {
     expect(noteFolder(dir, ['plain'])).toBe(dir)
   })
 
-  it.each([['../../../etc'], ['a/../../x'], ['a/ ../ ../x'], ['/etc/passwd'], ['..\\..\\x/y'], ['a//b'], ['... ../x'], ['. . ./x']])(
+  it.each([['../../../etc'], ['a/../../x'], ['a/ ../ ../x'], ['/etc/passwd'], ['..\\..\\x/y'], ['a//b'], ['... ../x'], ['. . ./x'], ['... ../... ../x']])(
     'keeps label %j inside the export folder',
     (label) => {
       const folder = noteFolder(dir, [label])
