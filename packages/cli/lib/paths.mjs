@@ -10,8 +10,7 @@ export const safeName = (s) =>
   s
     .replace(/[\\/:*?"<>|\u0000-\u001f]/g, '-')
     .replace(/\s+/g, ' ')
-    .trim()
-    .replace(/^\.+/, '')
+    .replace(/^[.\s]+/, '') // all leading dots and spaces, so no ".." is left behind
     .trim()
     .slice(0, 100) || 'note'
 

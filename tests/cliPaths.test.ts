@@ -11,7 +11,7 @@ describe('CLI export paths', () => {
     expect(noteFolder(dir, ['plain'])).toBe(dir)
   })
 
-  it.each([['../../../etc'], ['a/../../x'], ['a/ ../ ../x'], ['/etc/passwd'], ['..\\..\\x/y'], ['a//b']])(
+  it.each([['../../../etc'], ['a/../../x'], ['a/ ../ ../x'], ['/etc/passwd'], ['..\\..\\x/y'], ['a//b'], ['... ../x'], ['. . ./x']])(
     'keeps label %j inside the export folder',
     (label) => {
       const folder = noteFolder(dir, [label])
@@ -21,7 +21,7 @@ describe('CLI export paths', () => {
   )
 
   it('never returns a dot segment', () => {
-    for (const s of ['..', '.', ' ..', '... ', '.ssh']) expect(safeName(s)).not.toMatch(/^\./)
+    for (const s of ['..', '.', ' ..', '... ', '.ssh', '... ..', '. . .']) expect(safeName(s)).not.toMatch(/^\./)
     expect(safeName('..')).toBe('note')
   })
 })

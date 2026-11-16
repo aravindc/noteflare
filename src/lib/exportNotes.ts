@@ -35,8 +35,7 @@ const safeName = (s: string) =>
   s
     .replace(/[\\/:*?"<>|\u0000-\u001f]/g, '-')
     .replace(/\s+/g, ' ')
-    .trim()
-    .replace(/^\.+/, '') // no "..", so a label can't climb out of the export folder
+    .replace(/^[.\s]+/, '') // all leading dots and spaces: no "..", so a label can't climb out of the export folder
     .trim()
     .slice(0, 100) || 'note'
 
